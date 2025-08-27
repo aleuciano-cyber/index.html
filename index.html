@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz de Promoções PMTO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 1.5rem;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+        }
+        .question-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+        .answer-btn {
+            background-color: #e5e7eb;
+            color: #1f2937;
+            font-weight: 500;
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            text-align: left;
+            border: 2px solid transparent;
+        }
+        .answer-btn:hover {
+            background-color: #d1d5db;
+        }
+        .correct {
+            background-color: #d1fae5;
+            border-color: #34d399;
+            color: #065f46;
+        }
+        .correct:hover {
+            background-color: #a7f3d0;
+        }
+        .incorrect {
+            background-color: #fee2e2;
+            border-color: #f87171;
+            color: #991b1b;
+        }
+        .incorrect:hover {
+            background-color: #fecaca;
+        }
+        .justification-box {
+            background-color: #f9fafb;
+            border-left: 4px solid #6366f1;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            margin-top: 1.5rem;
+        }
+        .justification-text {
+            color: #4b5563;
+        }
+        .btn-navigation {
+            padding: 0.75rem 2rem;
+            border-radius: 0.75rem;
+            font-weight: 700;
+            color: #ffffff;
+            background-color: #4f46e5;
+            transition: background-color 0.2s;
+        }
+        .btn-navigation:hover {
+            background-color: #4338ca;
+        }
+        .btn-navigation:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+<div class="container">
+    <div class="card">
+        <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">Quiz: Lei de Promoções PMTO</h1>
+        <div id="quiz-container">
+            <!-- Conteúdo do quiz será injetado aqui pelo JavaScript -->
+        </div>
+        <div class="mt-6 flex justify-between items-center">
+            <div id="progress" class="text-sm font-medium text-gray-500">Questão 1 de 80</div>
+            <div class="flex space-x-4">
+                <button id="restart-btn" class="btn-navigation bg-red-500 hover:bg-red-600">Reiniciar</button>
+                <button id="next-btn" class="btn-navigation" disabled>Próxima Questão</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        {
+            question: "1. Em conformidade com o Art. 1º da Lei nº 2.575/12, a promoção é o ato administrativo cuja finalidade principal é o reconhecimento do mérito e da habilitação do Policial Militar para o exercício de Posto ou Graduação imediatamente superior. Sobre os aspectos que regem este ato, analise as afirmativas a seguir e assinale a alternativa CORRETA:",
+            options: [
+                "A promoção se dá por meio de um ato discricionário da administração, sem que haja previsão legal para o preenchimento de vagas.",
+                "As formas seletiva, gradual e sucessiva não são resultado de um planejamento de carreira, mas sim de uma necessidade pontual da Corporação.",
+                "O planejamento da carreira é atribuição da PMTO e visa um fluxo regular, contínuo e equilibrado, segundo as necessidades da instituição e os interesses da Administração Pública estadual.",
+                "A promoção é um ato administrativo que visa, primordialmente, recompensar o Policial Militar por atos de bravura, independentemente de vaga."
+            ],
+            answer: 2,
+            justification: "Art. 1º, § 2º da Lei nº 2.575/12."
+        },
+        {
+            question: "2. O Art. 3º-A da Lei nº 2.575/12 estabelece as promoções que independem de data. A respeito dessas exceções, analise as afirmativas e assinale a alternativa que NÃO corresponde a uma delas:",
+            options: [
+                "A promoção por bravura.",
+                "A promoção por tempo de serviço.",
+                "A promoção por invalidez permanente.",
+                "A promoção por merecimento."
+            ],
+            answer: 3,
+            justification: "A promoção por merecimento, assim como a por antiguidade, ocorre em datas anuais fixadas, não sendo uma das exceções listadas no Art. 3º-A, § 1º da Lei."
+        },
+        {
+            question: "3. Conforme o Art. 4º da Lei nº 2.575/12, assinale a alternativa que apresenta uma situação em que o Policial Militar é considerado responsável único pela sua não inclusão em Quadro de Acesso (QA):",
+            options: [
+                "Quando a Corporação não oferece o curso de habilitação necessário.",
+                "Quando o militar frui licença a pedido e, por isso, não satisfaz os requisitos exigidos.",
+                "Quando ocorre um erro administrativo na contagem de seus pontos.",
+                "Quando é absolvido em processo que o impedia de ser promovido."
+            ],
+            answer: 1,
+            justification: "O Art. 4º estabelece que o militar que, por ter sido transferido mediante requerimento, fruído licença a pedido, ou desempenhado função de natureza civil, não satisfizer os requisitos, é o responsável único."
+        },
+        {
+            question: "4. O Art. 5º, parágrafo único, da Lei nº 2.575/12, equipara o comportamento de Oficiais ao de Praças para fins de aplicação da lei. Analise as afirmativas a seguir e assinale a alternativa INCORRETA:",
+            options: [
+                "Para fins de promoção, o Oficial em comportamento inferior a 'bom' não pode constar de qualquer QA.",
+                "Para fins de promoção, o Oficial em comportamento 'bom' pode constar tanto do QA por Antiguidade quanto do QA por Merecimento.",
+                "A lei não prevê a classificação de comportamento para Oficiais, aplicando-se apenas para Praças.",
+                "O comportamento de um Oficial é classificado conforme o previsto para Praça, para os efeitos desta Lei."
+            ],
+            answer: 2,
+            justification: "A afirmativa é incorreta pois o Art. 5º, Parágrafo Único, estabelece expressamente a equiparação para os efeitos da lei de promoções."
+        },
+        {
+            question: "5. O que se entende por 'interstício' na Lei de Promoções da PMTO?",
+            options: [
+                "É o tempo mínimo de serviço na PMTO que o militar precisa ter para ser promovido.",
+                "É o tempo mínimo de permanência em cada Posto ou Graduação, sendo requisito essencial para o ingresso em Quadro de Acesso-QA.",
+                "É o tempo de serviço em cada posto ou graduação, mas não pode ser reduzido em nenhuma hipótese.",
+                "É o tempo máximo que o militar pode permanecer em um posto ou graduação."
+            ],
+            answer: 1,
+            justification: "Definição extraída do Art. 36 da Lei."
+        },
+        {
+            question: "6. De acordo com o Art. 31, além do interstício, um dos requisitos para o ingresso em QA é a condição de saúde. Sobre este requisito, é correto afirmar que:",
+            options: [
+                "A condição de saúde é avaliada por um médico particular, desde que ele seja especialista na área militar.",
+                "A condição de saúde é avaliada por inspeção médica oficial.",
+                "A condição de saúde só é avaliada em casos de promoção por invalidez.",
+                "A condição de saúde é avaliada pelo comandante da unidade, que emite um parecer."
+            ],
+            answer: 1,
+            justification: "Art. 31, Inciso II, e Art. 38 da Lei."
+        },
+        {
+            question: "7. O Art. 7º trata da proporção de vagas entre os critérios de Antiguidade e Merecimento. Sobre a ordem de preenchimento, assinale a alternativa CORRETA:",
+            options: [
+                "O preenchimento das vagas se faz de forma alternada, sempre iniciando com o critério de merecimento.",
+                "O preenchimento da primeira vaga ocorre por antiguidade e, a seguir, as vagas subsequentes são preenchidas por merecimento e antiguidade, alternadamente.",
+                "As promoções por antiguidade e merecimento são sempre em números pares para manter a proporção.",
+                "O critério de merecimento tem precedência apenas para a promoção ao posto de Coronel."
+            ],
+            answer: 1,
+            justification: "Conforme o Art. 68 da Lei, a primeira vaga é preenchida por antiguidade. O Art. 7º, parágrafo único, estabelece que o preenchimento é contínuo e alternado."
+        },
+        {
+            question: "8. Conforme a Lei nº 2.575/12, as vagas para promoção são consideradas abertas quando ocorre um dos seguintes eventos, EXCETO:",
+            options: [
+                "Falecimento do Policial Militar.",
+                "Aumento de efetivo previsto em lei.",
+                "Passagem do militar para a agregação.",
+                "Transferência do militar para outra unidade."
+            ],
+            answer: 3,
+            justification: "A transferência entre unidades não abre vaga no quadro. O Art. 8º lista os motivos de abertura de vaga, incluindo falecimento, aumento de efetivo e agregação."
+        },
+        {
+            question: "9. Sobre a elaboração do Quadro de Acesso (QA), é INCORRETO afirmar que:",
+            options: [
+                "O QA é a relação nominal dos militares que estão habilitados para a promoção.",
+                "O QA por antiguidade é organizado com base na precedência hierárquica estabelecida no almanaque.",
+                "O QA por merecimento é organizado em ordem decrescente, de acordo com a pontuação obtida pelo militar.",
+                "O QA não excede o quantitativo das vagas destinadas à promoção."
+            ],
+            answer: 3,
+            justification: "A afirmação O QA não excede o quantitativo das vagas destinadas à promoção é uma generalização falsa porque a própria Lei 2.575, no Art. 32, §1º, estabelece uma ressalva."
+        },
+        {
+            question: "10. De acordo com o Art. 32, § 2º da Lei de Promoções, em caso de empate na classificação no QA por Merecimento, qual é o critério de desempate?",
+            options: [
+                "Maior idade.",
+                "Maior tempo de efetivo serviço na PMTO.",
+                "A antiguidade entre os empatados.",
+                "Maior nota no último curso de carreira."
+            ],
+            answer: 2,
+            justification: "Art. 32, § 2º: 'O desempate da promoção pelo critério de merecimento de dois ou mais Policiais Militares se faz pela antiguidade.'"
+        },
+        {
+            question: "11. A respeito da publicação dos Quadros de Acesso (QA), assinale a alternativa CORRETA:",
+            options: [
+                "Os QA de Oficiais são publicados no Boletim Geral e os de Praças no Boletim Reservado.",
+                "Os QA são publicados no Boletim Reservado, no caso de Oficiais, e no Boletim Geral, no de Praças.",
+                "A publicação do QA garante que o militar será promovido na data subsequente.",
+                "Os QA, após elaborados pela Comissão de Promoção, são aprovados pelo Chefe do Poder Executivo."
+            ],
+            answer: 1,
+            justification: "Art. 34, § 1º da Lei."
+        },
+        {
+            question: "12. O Policial Militar que for excluído do Quadro de Acesso-QA por ter sido condenado definitivamente por crime doloso, pode recorrer administrativamente desta exclusão?",
+            options: [
+                "Sim, no prazo de 10 dias, para a Comissão de Promoção.",
+                "Não, a lei não prevê recurso para esta situação específica de exclusão.",
+                "Sim, no prazo de 10 dias, diretamente ao Comandante-Geral.",
+                "Sim, no prazo de 30 dias, para o Chefe do Poder Executivo."
+            ],
+            answer: 1,
+            justification: "A exclusão por condenação definitiva por crime doloso é uma das hipóteses do Art. 33, VII. O direito ao recurso, previsto no Art. 58, refere-se à composição do QA ou preterição, não a uma exclusão por impedimento legal absoluto."
+        },
+        {
+            question: "13. Sobre a composição da Comissão de Promoção de Oficiais (CPO), conforme o Art. 11 da Lei nº 2.575/12, assinale a alternativa CORRETA:",
+            options: [
+                "A CPO é presidida pelo Chefe do Estado-Maior e composta por seis membros.",
+                "O Comandante-Geral preside a CPO, que conta com o Chefe e o Subchefe do Estado-Maior como membros natos.",
+                "A CPO é composta exclusivamente por Coronéis do último posto, presidida pelo mais antigo.",
+                "O Corregedor da PMTO é um membro nato da CPO, com direito a voto de qualidade."
+            ],
+            answer: 1,
+            justification: "A composição da CPO é definida no Art. 11 da Lei, que estabelece o Comandante-Geral como presidente."
+        },
+        {
+            question: "14. A respeito da Comissão de Promoção de Praças (CPP), é correto afirmar que:",
+            options: [
+                "A CPP é presidida pelo Comandante-Geral.",
+                "O Diretor de Gestão Profissional é um membro nato da CPP, que é presidida pelo Chefe do Estado-Maior.",
+                "A CPP é composta por Praças de postos variados, para garantir a imparcialidade nas decisões.",
+                "As decisões da CPP não precisam de homologação do Comandante-Geral."
+            ],
+            answer: 1,
+            justification: "Art. 12 da Lei."
+        },
+        {
+            question: "15. Qual é uma das principais competências das Comissões de Promoção (CPO e CPP)?",
+            options: [
+                "Definir o número de vagas a serem preenchidas em cada promoção.",
+                "Realizar a inspeção de saúde dos militares para a promoção.",
+                "Organizar os Quadros de Acesso (QA).",
+                "Publicar as promoções no Diário Oficial do Estado."
+            ],
+            answer: 2,
+            justification: "Art. 19, I, e Art. 20 da Lei."
+        },
+        {
+            question: "16. Sobre os requisitos para a promoção por antiguidade, é INCORRETO afirmar que:",
+            options: [
+                "O militar deve possuir o interstício exigido.",
+                "O militar deve ter pontuação positiva na avaliação profissional e moral.",
+                "O militar deve ser habilitado em curso de carreira, quando exigido.",
+                "O militar deve estar incluído no Quadro de Acesso por Antiguidade (QAA)."
+            ],
+            answer: 1,
+            justification: "Conforme o Art. 31, Parágrafo único, a exigência de pontuação positiva na avaliação profissional e moral não se aplica às promoções pelo critério de antiguidade."
+        },
+        {
+            question: "17. O que a Lei nº 2.575/12 entende por 'merecimento' para fins de promoção?",
+            options: [
+                "Apenas o resultado do conceito profissional e moral.",
+                "A pontuação obtida em cursos e estágios, conforme regulamento.",
+                "O conjunto de qualidades e atributos que distinguem o valor do Policial Militar entre seus pares.",
+                "A pontuação total obtida nos testes de aptidão física anuais."
+            ],
+            answer: 2,
+            justification: "Art. 23 da Lei."
+        },
+        {
+            question: "18. A respeito dos critérios de pontuação para a promoção por merecimento, assinale a alternativa CORRETA:",
+            options: [
+                "A pontuação em cursos civis é o único critério considerado.",
+                "O tempo de efetivo serviço prestado é um dos critérios de avaliação que gera pontos positivos.",
+                "O tempo de serviço total na PMTO não é um critério para avaliação do merecimento.",
+                "O comportamento militar não gera pontuação para o merecimento."
+            ],
+            answer: 1,
+            justification: "Art. 42, I da Lei."
+        },
+        {
+            question: "19. A promoção por ato de bravura é concedida ao Policial Militar que pratica um ato que transcende o desempenho normal do dever. Sobre esta modalidade, é correto afirmar que:",
+            options: [
+                "A promoção por bravura depende da existência de vaga no Quadro.",
+                "O militar promovido por bravura é dispensado de todos os cursos de carreira futuros.",
+                "A promoção por bravura é uma das promoções que independem de data.",
+                "A promoção por bravura é concedida pelo Comandante da Unidade em que o ato foi praticado."
+            ],
+            answer: 2,
+            justification: "Art. 3º-A, § 1º da Lei."
+        },
+        {
+            question: "20. A respeito da promoção post mortem, assinale a alternativa INCORRETA:",
+            options: [
+                "É concedida ao Policial Militar que falecer em consequência de ferimento recebido ou doença adquirida em ação de manutenção da ordem pública.",
+                "A promoção post mortem independe de data e de vaga.",
+                "A data da promoção retroage à data do falecimento do militar.",
+                "A promoção post mortem só é concedida se o militar já estivesse no Quadro de Acesso."
+            ],
+            answer: 3,
+            justification: "A promoção post mortem pode ocorrer em duas hipóteses, conforme o Art. 52: pelo falecimento em serviço (I) ou se, ao falecer, já cumpria as condições de acesso (II). A alternativa 'd' generaliza incorretamente."
+        },
+        {
+            question: "21. A promoção por invalidez permanente ocorre quando o militar é julgado incapaz para o serviço. Sobre esta modalidade, assinale a alternativa CORRETA:",
+            options: [
+                "A promoção por invalidez permanente depende da existência de vaga no quadro.",
+                "O militar promovido por invalidez será automaticamente transferido para a reserva remunerada.",
+                "A promoção por invalidez permanente independe de data e de vaga.",
+                "O militar promovido por invalidez não tem direito à remuneração do posto ou graduação a que foi promovido."
+            ],
+            answer: 2,
+            justification: "Art. 3º-A, § 1º, e Art. 56 da Lei."
+        },
+        {
+            question: "22. O que acontece se o militar reformado por incapacidade definitiva tiver o motivo de sua reforma cessado e retornar ao serviço ativo?",
+            options: [
+                "Ele será promovido ao posto seguinte ao que ocupava na ativa.",
+                "Ele retorna ao posto ou graduação que ocupava, e caso o quadro esteja completo, ficará na condição de excedente.",
+                "Ele será transferido compulsoriamente para a inatividade.",
+                "Ele deve iniciar um novo curso de formação."
+            ],
+            answer: 1,
+            justification: "Art. 10, III da Lei."
+        },
+        {
+            question: "23. O que acontece com o militar que for reprovado em curso de carreira exigido para promoção?",
+            options: [
+                "Ele é impedido de realizar o curso novamente.",
+                "Ele não pode ser incluído no Quadro de Acesso até que conclua o curso com aproveitamento.",
+                "Ele é promovido por antiguidade, caso seja o mais antigo, mesmo sem o curso.",
+                "Ele é transferido para a reserva remunerada."
+            ],
+            answer: 1,
+            justification: "A conclusão do curso é um requisito essencial para ingresso no QA, conforme Art. 31 c/c Art. 39. A não satisfação impede a inclusão, conforme Art. 33, I."
+        },
+        {
+            question: "24. A Avaliação Profissional e Moral é um processo contínuo e obrigatório. Sobre o período de sua realização, assinale a alternativa CORRETA:",
+            options: [
+                "A avaliação é realizada anualmente, para fins de promoção.",
+                "A avaliação é realizada a cada seis meses, para a elaboração do QA.",
+                "A avaliação é realizada somente quando o militar é indicado para promoção.",
+                "A avaliação é realizada por um período de dois anos, para maior precisão."
+            ],
+            answer: 0,
+            justification: "A avaliação é um dos componentes para a pontuação do QAM, que é organizado para as promoções anuais."
+        },
+        {
+            question: "25. A respeito do recurso contra a composição de QA ou preterição à promoção, é CORRETO afirmar que:",
+            options: [
+                "O recurso deve ser interposto no prazo de 30 dias, a contar da publicação.",
+                "O recurso deve ser dirigido ao Chefe do Poder Executivo, em todos os casos.",
+                "O prazo para recorrer da composição de QA para promoção é de 10 dias, contados da publicação oficial.",
+                "Não cabe recurso contra a composição do Quadro de Acesso."
+            ],
+            answer: 2,
+            justification: "Art. 60 da Lei."
+        },
+        {
+            question: "26. O Art. 63 da Lei nº 2.575/12 trata do preenchimento de vagas para os Cursos de Habilitação de Oficiais (CHOA, CHOM, CHOAS). A respeito do cálculo de vagas, analise a afirmativa CORRETA:",
+            options: [
+                "Se o resultado do cálculo de vagas por antiguidade for um número fracionário, ele é arredondado para o número inteiro imediatamente superior.",
+                "Se o resultado do cálculo for um número fracionário, ele é fixado no número inteiro imediatamente inferior, e o excedente é somado às vagas da seleção interna.",
+                "A fração resultante de um cálculo de vagas é sempre descartada.",
+                "As vagas não preenchidas por antiguidade são anuladas e não podem ser utilizadas na seleção interna."
+            ],
+            answer: 1,
+            justification: "Art. 63, § 1º, II da Lei e Apostila, p. 18."
+        },
+        {
+            question: "27. De acordo com o Art. 67, não há promoção onde houver excedente, salvo o caso de ressarcimento de preterição. O que significa 'ressarcimento de preterição'?",
+            options: [
+                "A promoção que corrige uma falha da administração pública que impediu uma promoção anterior do militar.",
+                "A promoção que ocorre quando o militar atinge a idade limite para permanência na ativa.",
+                "A promoção por ato de bravura, que independe de vaga.",
+                "A promoção post mortem, em caso de falecimento em serviço."
+            ],
+            answer: 0,
+            justification: "Art. 61 da Lei."
+        },
+        {
+            question: "28. A quem compete efetivar a promoção de Tenente-Coronel a Coronel, pelo critério de escolha?",
+            options: [
+                "Ao Comandante-Geral da PMTO.",
+                "Ao Chefe do Poder Executivo.",
+                "À Comissão de Promoção de Oficiais.",
+                "Ao Chefe do Estado-Maior."
+            ],
+            answer: 1,
+            justification: "Art. 24 e Art. 48 da Lei."
+        },
+        {
+            question: "29. A Lei nº 2.575/12 estabelece que os Oficiais e as Praças da PMTO são promovidos na forma estabelecida nesta Lei. Quem define o quantitativo de vagas a preencher em cada promoção?",
+            options: [
+                "O Comandante-Geral, por meio de ato discricionário.",
+                "A Comissão de Promoção, de acordo com as necessidades da Corporação.",
+                "O Chefe do Poder Executivo para Oficiais e o Comandante-Geral para Praças.",
+                "A Diretoria de Pessoal, por meio de um estudo estatístico."
+            ],
+            answer: 2,
+            justification: "Art. 8º, Parágrafo único da Lei."
+        },
+        {
+            question: "30. Sobre a definição de Quadro de Organização e Distribuição de Efetivos (QOD), assinale a alternativa CORRETA:",
+            options: [
+                "É o documento que organiza as datas das promoções de Oficiais e Praças.",
+                "É o instrumento que define o efetivo total da PMTO, sem detalhar a distribuição por postos e graduações.",
+                "É o documento que distribui o efetivo da PMTO nos postos e graduações, com a finalidade de planejar a carreira dos Policiais Militares.",
+                "É o documento que estabelece as normas para a promoção por merecimento."
+            ],
+            answer: 2,
+            justification: "Art. 1º da Lei e Apostila, p. 1."
+        },
+        {
+            question: "31. Com base na Lei, assinale a alternativa INCORRETA sobre o preenchimento de vagas para o CHOA, CHOM e CHOAS:",
+            options: [
+                "Até 31 de dezembro de 2025, as vagas são preenchidas 50% por antiguidade e 50% por seleção interna.",
+                "A partir de 1º de janeiro de 2026, as vagas serão preenchidas somente mediante seleção interna.",
+                "Para ser convocado por antiguidade para o CHOA, o Subtenente deve ter, no mínimo, quatorze anos de efetivo serviço na PMTO.",
+                "Ao término dos cursos CHOA, CHOM e CHOAS, a antiguidade é estabelecida pela data de conclusão do curso, independentemente da classificação final."
+            ],
+            answer: 3,
+            justification: "A afirmação é incorreta. Conforme o Art. 63, § 2º da Lei, a antiguidade é estabelecida mediante a classificação final e geral do respectivo curso."
+        },
+        {
+            question: "32. Qual a principal finalidade da Comissão de Promoção (CP)?",
+            options: [
+                "Organizar a folha de alterações do Policial Militar.",
+                "Elaborar os Quadros de Acesso de Antiguidade e Merecimento.",
+                "Propor o número de vagas a serem preenchidas em cada promoção.",
+                "Publicar as promoções no Diário Oficial do Estado."
+            ],
+            answer: 1,
+            justification: "Art. 19, I, da Lei."
+        },
+        {
+            question: "33. Em qual situação um militar da PMTO, já promovido por bravura, pode ser submetido a um curso de habilitação?",
+            options: [
+                "Se ele tiver menos de 10 anos de serviço.",
+                "Se ele não atender aos requisitos da nova posição na escala hierárquica.",
+                "Se ele tiver menos de 20 anos de serviço.",
+                "A promoção por bravura isenta o militar de todos os cursos."
+            ],
+            answer: 1,
+            justification: "Art. 51 da Lei."
+        },
+        {
+            question: "34. O militar que for promovido por invalidez tem direito à remuneração de qual posto ou graduação?",
+            options: [
+                "O posto ou graduação anterior.",
+                "O posto ou graduação imediatamente superior.",
+                "O posto ou graduação a que foi promovido.",
+                "O posto ou graduação de sua escolha."
+            ],
+            answer: 2,
+            justification: "A promoção garante todos os direitos e prerrogativas do novo posto/graduação."
+        },
+        {
+            question: "35. Quais são os critérios que geram pontuação para a promoção por merecimento?",
+            options: [
+                "Desempenho profissional e moral, tempo de efetivo serviço no posto, pontuação em cursos e estágios.",
+                "Idade, tempo de serviço total e sanidade física.",
+                "Apenas a pontuação em cursos.",
+                "Apenas o conceito profissional e moral."
+            ],
+            answer: 0,
+            justification: "Art. 42 da Lei."
+        },
+        {
+            question: "36. O que a Lei nº 2.575/12 considera como 'promoção por ressarcimento de preterição'?",
+            options: [
+                "A promoção que ocorre quando o militar atinge o tempo máximo de serviço.",
+                "A correção de um erro administrativo que impediu uma promoção anterior.",
+                "A promoção por antiguidade.",
+                "A promoção por bravura."
+            ],
+            answer: 1,
+            justification: "Art. 61 da Lei."
+        },
+        {
+            question: "37. Para a matrícula nos cursos da Corporação, os Policiais militares concorrem às vagas fixadas em edital em relação a seus respectivos:",
+            options: [
+                "Quadros.",
+                "Cidades.",
+                "Postos.",
+                "Graduações."
+            ],
+            answer: 0,
+            justification: "Art. 66 da Lei."
+        },
+        {
+            question: "38. Se o Policial Militar for reprovado em curso de carreira exigido para promoção, qual a consequência?",
+            options: [
+                "Ele pode ser promovido por antiguidade.",
+                "Ele não poderá ser incluído no QA até obter aprovação no curso.",
+                "Ele deve esperar um ano para poder se matricular novamente.",
+                "Ele perde o direito à promoção por merecimento."
+            ],
+            answer: 1,
+            justification: "A conclusão do curso é requisito essencial (Art. 31 e 39). A não satisfação do requisito impede a inclusão no QA (Art. 33, I)."
+        },
+        {
+            question: "39. O Art. 39 da Lei nº 2.575/12 define as atividades peculiares a cada Posto ou Graduação, que são requisitos para a promoção. Assinale a alternativa que lista CORRETAMENTE todas essas atividades:",
+            options: [
+                "Apenas a realização de cursos e estágios profissionalizantes.",
+                "Cursos, serviço arregimentado e exercício de função específica.",
+                "Serviço arregimentado e o conceito profissional e moral.",
+                "Cursos, o interstício e a condição de saúde."
+            ],
+            answer: 1,
+            justification: "O Art. 39 da Lei elenca expressamente os três itens (cursos, serviço arregimentado e exercício de função específica) como as atividades peculiares indispensáveis para a promoção."
+        },
+        {
+            question: "40. Qual o interstício mínimo de permanência no posto de Capitão para fins de ingresso no QA?",
+            options: [
+                "24 meses.",
+                "36 meses.",
+                "48 meses.",
+                "60 meses."
+            ],
+            answer: 2,
+            justification: "Art. 36, II, 'd' da Lei."
+        },
+        {
+            question: "41. A respeito das decisões da Comissão de Promoção, assinale a alternativa correta:",
+            options: [
+                "São tomadas por maioria de votos.",
+                "São tomadas por unanimidade.",
+                "São tomadas por decisão do Presidente.",
+                "São sempre submetidas ao Chefe do Poder Executivo para aprovação."
+            ],
+            answer: 0,
+            justification: "Art. 15 da Lei."
+        },
+        {
+            question: "42. As decisões das Comissões de Promoção são tomadas por qual critério de votação?",
+            options: [
+                "Maioria simples, cabendo ao Presidente apenas voto de qualidade.",
+                "Unanimidade de todos os membros.",
+                "Maioria qualificada de dois terços dos membros.",
+                "Decisão monocrática do Presidente."
+            ],
+            answer: 0,
+            justification: "Art. 15 da Lei."
+        },
+        {
+            question: "43. A Comissão de Promoção de Praças (CPP) será presidida pelo:",
+            options: [
+                "Chefe do Estado-Maior.",
+                "Corregedor.",
+                "Diretor de Gestão Profissional.",
+                "Comandante-Geral."
+            ],
+            answer: 0,
+            justification: "Art. 12, caput, da Lei."
+        },
+        {
+            question: "44. A respeito da Comissão de Promoção de Oficiais (CPO), assinale a alternativa INCORRETA:",
+            options: [
+                "É presidida pelo Comandante-Geral.",
+                "O Chefe do Estado-Maior é um dos membros natos.",
+                "É composta por quatro Oficiais Superiores como membros efetivos.",
+                "O Corregedor é um dos membros natos."
+            ],
+            answer: 3,
+            justification: "O Corregedor não é listado como membro da CPO no Art. 11 da Lei."
+        },
+        {
+            question: "45. O Presidente da CPO é o:",
+            options: [
+                "Chefe do Estado-Maior da PMTO.",
+                "Comandante-Geral da PMTO.",
+                "Corregedor da PMTO.",
+                "Diretor de Gestão Profissional da PMTO."
+            ],
+            answer: 1,
+            justification: "Art. 11, caput, da Lei."
+        },
+        {
+            question: "46. A Comissão de Promoção de Oficiais (CPO) é composta por quantos membros no total?",
+            options: [
+                "3 membros.",
+                "5 membros.",
+                "7 membros (Presidente + 2 natos + 4 efetivos).",
+                "9 membros."
+            ],
+            answer: 2,
+            justification: "Art. 11 da Lei."
+        },
+        {
+            question: "47. Qual é a principal responsabilidade da Comissão de Promoção?",
+            options: [
+                "Propor o número de vagas.",
+                "Organizar a folha de alterações do Policial Militar.",
+                "Organizar os Quadros de Acesso.",
+                "Promover os militares."
+            ],
+            answer: 2,
+            justification: "Art. 19, I, e Art. 20 da Lei."
+        },
+        {
+            question: "48. Assinale a alternativa que NÃO é um motivo de exclusão do QA:",
+            options: [
+                "Falecimento.",
+                "Estar agregado por motivo de saúde.",
+                "Licença para tratar de interesse particular por mais de seis meses.",
+                "Ser condenado definitivamente por crime doloso."
+            ],
+            answer: 1,
+            justification: "A agregação por motivo de saúde não é uma das causas de exclusão listadas no Art. 33. A incapacidade definitiva, sim."
+        },
+        {
+            question: "49. Qual o prazo máximo para que o Policial Militar interponha recurso contra a sua não inclusão ou preterição no QA?",
+            options: [
+                "5 dias úteis, a contar da data da publicação.",
+                "10 dias, a contar da data da publicação oficial.",
+                "15 dias, a contar da data da publicação.",
+                "30 dias, a contar da data da publicação."
+            ],
+            answer: 1,
+            justification: "Art. 60 da Lei."
+        },
+        {
+            question: "50. A respeito da publicação dos QA, assinale a alternativa incorreta:",
+            options: [
+                "O QA de Oficiais é publicado no Boletim Reservado.",
+                "O QA de Praças é publicado no Boletim Geral.",
+                "A publicação deve ocorrer em até 15 dias da data da promoção.",
+                "A publicação é de responsabilidade da Diretoria de Gestão Profissional."
+            ],
+            answer: 3,
+            justification: "A organização e publicação são atribuições das Comissões de Promoção, conforme Art. 19 e 20."
+        },
+        {
+            question: "51. Qual o critério para a promoção de um Aspirante a Oficial ao posto de 2º Tenente?",
+            options: [
+                "A promoção depende de vaga e de conceito profissional.",
+                "A promoção é por merecimento, baseada na classificação do curso.",
+                "A promoção é por antiguidade, estabelecida pela classificação final e geral do respectivo curso de formação.",
+                "A promoção é por escolha do Comandante-Geral."
+            ],
+            answer: 2,
+            justification: "Art. 7º, II da Lei."
+        },
+        {
+            question: "52. As promoções na PMTO são realizadas anualmente em qual data?",
+            options: [
+                "21 de abril e 15 de novembro.",
+                "25 de agosto.",
+                "Na data estabelecida no art. 13, § 11, da Constituição do Estado do Tocantins.",
+                "Na data fixada pelo Comandante-Geral."
+            ],
+            answer: 2,
+            justification: "Art. 3º-A da Lei."
+        },
+        {
+            question: "53. Em relação aos Quadros de Acesso (QA), assinale a alternativa correta:",
+            options: [
+                "O Policial Militar com comportamento inferior a 'bom' pode constar do QA.",
+                "O comportamento do Oficial é classificado conforme o previsto para Praça, para efeitos desta Lei.",
+                "O Comandante-Geral não pode investigar um ato grave que possa influir na avaliação de um colega.",
+                "A investigação de ato grave é de responsabilidade exclusiva da Corregedoria."
+            ],
+            answer: 1,
+            justification: "Art. 5º, parágrafo único da Lei."
+        },
+        {
+            question: "54. O que é considerado como 'interstício' para fins de promoção?",
+            options: [
+                "O tempo de serviço total na PMTO.",
+                "O tempo mínimo de permanência em cada posto ou graduação.",
+                "O tempo de trabalho na unidade.",
+                "O período de licença."
+            ],
+            answer: 1,
+            justification: "Art. 36 da Lei."
+        },
+        {
+            question: "55. São requisitos essenciais para o ingresso em QA, EXCETO:",
+            options: [
+                "Pontuação positiva na avaliação profissional e moral.",
+                "Condição de saúde avaliada por inspeção médica oficial.",
+                "Interstício.",
+                "Conclusão de curso de pós-graduação."
+            ],
+            answer: 3,
+            justification: "Art. 31 da Lei. Pós-graduação pode gerar pontos, mas não é requisito essencial."
+        },
+        {
+            question: "56. Como se dá o preenchimento de vagas para Oficiais quando há mais de uma vaga?",
+            options: [
+                "Todas por antiguidade.",
+                "Todas por merecimento.",
+                "De forma alternada, uma por antiguidade e uma por merecimento.",
+                "A critério do Comandante-Geral."
+            ],
+            answer: 2,
+            justification: "Art. 7º, I da Lei."
+        },
+        {
+            question: "57. Considera-se aberta a vaga quando, EXCETO:",
+            options: [
+                "Ocorrer a transferência para a reserva remunerada.",
+                "Ocorrer a demissão do militar.",
+                "Ocorrer o falecimento do Policial Militar.",
+                "Ocorrer a reversão do militar que estava agregado."
+            ],
+            answer: 3,
+            justification: "A reversão é o retorno ao serviço ativo, o que preenche uma vaga, não abre uma. Os outros itens estão no Art. 8º."
+        },
+        {
+            question: "58. O que é o Quadro de Acesso (QA)?",
+            options: [
+                "É a relação nominal de militares habilitados para a promoção.",
+                "É a relação de militares que não podem ser promovidos.",
+                "É o documento que registra a antiguidade do militar.",
+                "É o registro das qualificações de cada militar."
+            ],
+            answer: 0,
+            justification: "Art. 30 da Lei."
+        },
+        {
+            question: "59. O QA por antiguidade é organizado de acordo com o quê?",
+            options: [
+                "O tempo de serviço na Corporação.",
+                "A precedência hierárquica estabelecida no almanaque respectivo.",
+                "A data da promoção anterior.",
+                "A idade do militar."
+            ],
+            answer: 1,
+            justification: "Art. 32, I da Lei."
+        },
+        {
+            question: "60. O QA por merecimento é organizado com base em qual critério?",
+            options: [
+                "Apenas na pontuação da avaliação profissional e moral.",
+                "Apenas na pontuação obtida em cursos e estágios.",
+                "Na pontuação decrescente obtida na avaliação profissional e moral.",
+                "Na idade e tempo de serviço."
+            ],
+            answer: 2,
+            justification: "Art. 32, II da Lei. A 'avaliação profissional e moral' aqui se refere à pontuação total, que inclui os diversos itens do Art. 42 e 43."
+        },
+        {
+            question: "61. Para a elaboração do QA por Merecimento, qual é o critério para desempate entre dois Policiais Militares com a mesma pontuação?",
+            options: [
+                "O que tiver mais tempo de efetivo serviço na PMTO.",
+                "O que tiver mais tempo de serviço no posto ou graduação.",
+                "O mais idoso.",
+                "A antiguidade."
+            ],
+            answer: 3,
+            justification: "Art. 32, § 2º da Lei."
+        },
+        {
+            question: "62. Quem é responsável pela elaboração do QA?",
+            options: [
+                "A Comissão de Promoção respectiva (CPO ou CPP).",
+                "O Comandante-Geral.",
+                "O Chefe do Poder Executivo.",
+                "A Diretoria de Gestão Profissional da PMTO."
+            ],
+            answer: 0,
+            justification: "Art. 19, I, e Art. 20 da Lei."
+        },
+        {
+            question: "63. A respeito da publicação dos QA, assinale a alternativa incorreta:",
+            options: [
+                "O QA de Oficiais é publicado no Boletim Reservado.",
+                "O QA de Praças é publicado no Boletim Geral.",
+                "A publicação deve ocorrer em até 15 dias da data da promoção.",
+                "A publicação é de responsabilidade da Diretoria de Gestão Profissional."
+            ],
+            answer: 3,
+            justification: "A publicação é de responsabilidade da Diretoria de Gestão Profissional."
+        },
+        {
+            question: "64. Qual o prazo máximo para que o Policial Militar interponha recurso contra a sua não inclusão ou preterição no QA?",
+            options: [
+                "5 dias úteis, a contar da data da publicação.",
+                "10 dias, a contar da data da publicação oficial.",
+                "15 dias, a contar da data da publicação.",
+                "30 dias, a contar da data da publicação."
+            ],
+            answer: 1,
+            justification: "Art. 60 da Lei."
+        },
+        {
+            question: "65. Assinale a alternativa que NÃO é um motivo de exclusão do QA:",
+            options: [
+                "Falecimento.",
+                "Estar agregado por motivo de saúde.",
+                "Licença para tratar de interesse particular por mais de seis meses.",
+                "Ser condenado definitivamente por crime doloso."
+            ],
+            answer: 1,
+            justification: "A agregação por motivo de saúde não é uma das causas de exclusão listadas no Art. 33. A incapacidade definitiva, sim."
+        },
+        {
+            question: "66. Qual é a principal responsabilidade da Comissão de Promoção?",
+            options: [
+                "Propor o número de vagas.",
+                "Organizar a folha de alterações do Policial Militar.",
+                "Organizar os Quadros de Acesso.",
+                "Promover os militares."
+            ],
+            answer: 2,
+            justification: "Art. 19 da Lei."
+        },
+        {
+            question: "67. A Comissão de Promoção de Oficiais (CPO) é composta por quantos membros no total?",
+            options: [
+                "3 membros.",
+                "5 membros.",
+                "7 membros (Presidente + 2 natos + 4 efetivos).",
+                "9 membros."
+            ],
+            answer: 2,
+            justification: "Art. 11 da Lei."
+        },
+        {
+            question: "68. O Presidente da CPO é o:",
+            options: [
+                "Chefe do Estado-Maior da PMTO.",
+                "Comandante-Geral da PMTO.",
+                "Corregedor da PMTO.",
+                "Diretor de Gestão Profissional da PMTO."
+            ],
+            answer: 1,
+            justification: "Art. 11, caput, da Lei."
+        },
+        {
+            question: "69. A respeito da Comissão de Promoção de Oficiais (CPO), assinale a alternativa INCORRETA:",
+            options: [
+                "É presidida pelo Comandante-Geral.",
+                "O Chefe do Estado-Maior é um dos membros natos.",
+                "É composta por quatro Oficiais Superiores como membros efetivos.",
+                "O Corregedor é um dos membros natos."
+            ],
+            answer: 3,
+            justification: "O Corregedor não é listado como membro da CPO no Art. 11 da Lei."
+        },
+        {
+            question: "70. A Comissão de Promoção de Praças (CPP) será presidida pelo:",
+            options: [
+                "Chefe do Estado-Maior.",
+                "Corregedor.",
+                "Diretor de Gestão Profissional.",
+                "Comandante-Geral."
+            ],
+            answer: 0,
+            justification: "Art. 12, caput, da Lei."
+        },
+        {
+            question: "71. As decisões das Comissões de Promoção são tomadas por qual critério de votação?",
+            options: [
+                "Maioria simples, cabendo ao Presidente apenas voto de qualidade.",
+                "Unanimidade de todos os membros.",
+                "Maioria qualificada de dois terços dos membros.",
+                "Decisão monocrática do Presidente."
+            ],
+            answer: 0,
+            justification: "Art. 15 da Lei."
+        },
+        {
+            question: "72. A respeito das decisões da Comissão de Promoção, assinale a alternativa correta:",
+            options: [
+                "São tomadas por maioria de votos.",
+                "São tomadas por unanimidade.",
+                "São tomadas por decisão do Presidente.",
+                "São sempre submetidas ao Chefe do Poder Executivo para aprovação."
+            ],
+            answer: 0,
+            justification: "Art. 15 da Lei."
+        },
+        {
+            question: "73. Qual o interstício mínimo de permanência no posto de Capitão para fins de ingresso no QA?",
+            options: [
+                "24 meses.",
+                "36 meses.",
+                "48 meses.",
+                "60 meses."
+            ],
+            answer: 2,
+            justification: "Art. 36, II, 'd' da Lei."
+        },
+        {
+            question: "74. O Art. 39 da Lei nº 2.575/12 define as atividades peculiares a cada Posto ou Graduação, que são requisitos para a promoção. Assinale a alternativa que lista CORRETAMENTE todas essas atividades:",
+            options: [
+                "Apenas a realização de cursos e estágios profissionalizantes.",
+                "Cursos, serviço arregimentado e exercício de função específica.",
+                "Serviço arregimentado e o conceito profissional e moral.",
+                "Cursos, o interstício e a condição de saúde."
+            ],
+            answer: 1,
+            justification: "O Art. 39 da Lei elenca expressamente os três itens (cursos, serviço arregimentado e exercício de função específica) como as atividades peculiares indispensáveis para a promoção."
+        },
+        {
+            question: "75. Se o Policial Militar for reprovado em curso de carreira exigido para promoção, qual a consequência?",
+            options: [
+                "Ele pode ser promovido por antiguidade.",
+                "Ele não poderá ser incluído no QA até obter aprovação no curso.",
+                "Ele deve esperar um ano para poder se matricular novamente.",
+                "Ele perde o direito à promoção por merecimento."
+            ],
+            answer: 1,
+            justification: "A conclusão do curso é requisito essencial (Art. 31 e 39). A não satisfação do requisito impede a inclusão no QA (Art. 33, I)."
+        },
+        {
+            question: "76. Para a matrícula nos cursos da Corporação, os Policiais militares concorrem às vagas fixadas em edital em relação a seus respectivos:",
+            options: [
+                "Quadros.",
+                "Cidades.",
+                "Postos.",
+                "Graduações."
+            ],
+            answer: 0,
+            justification: "Art. 66 da Lei."
+        },
+        {
+            question: "77. O que a Lei nº 2.575/12 considera como 'promoção por ressarcimento de preterição'?",
+            options: [
+                "A promoção que ocorre quando o militar atinge o tempo máximo de serviço.",
+                "A correção de um erro administrativo que impediu uma promoção anterior.",
+                "A promoção por antiguidade.",
+                "A promoção por bravura."
+            ],
+            answer: 1,
+            justification: "Art. 61 da Lei."
+        },
+        {
+            question: "78. Quais são os critérios que geram pontuação para a promoção por merecimento?",
+            options: [
+                "Desempenho profissional e moral, tempo de efetivo serviço no posto, pontuação em cursos e estágios.",
+                "Idade, tempo de serviço total e sanidade física.",
+                "Apenas a pontuação em cursos.",
+                "Apenas o conceito profissional e moral."
+            ],
+            answer: 0,
+            justification: "Art. 42 da Lei."
+        },
+        {
+            question: "79. O militar que for promovido por invalidez tem direito à remuneração de qual posto ou graduação?",
+            options: [
+                "O posto ou graduação anterior.",
+                "O posto ou graduação imediatamente superior.",
+                "O posto ou graduação a que foi promovido.",
+                "O posto ou graduação de sua escolha."
+            ],
+            answer: 2,
+            justification: "A promoção garante todos os direitos e prerrogativas do novo posto/graduação."
+        },
+        {
+            question: "80. A promoção por bravura independe de data. Em que caso um militar promovido por bravura pode ser submetido a um curso de habilitação?",
+            options: [
+                "Se ele tiver menos de 10 anos de serviço.",
+                "Se ele não atender aos requisitos da nova posição na escala hierárquica.",
+                "Se ele tiver menos de 20 anos de serviço.",
+                "A promoção por bravura isenta o militar de todos os cursos."
+            ],
+            answer: 1,
+            justification: "Art. 51 da Lei."
+        }
+    ];
+
+    let currentQuestionIndex = 0;
+    let quizContainer = document.getElementById('quiz-container');
+    let nextBtn = document.getElementById('next-btn');
+    let restartBtn = document.getElementById('restart-btn');
+    let progressDisplay = document.getElementById('progress');
+
+    function loadQuestion() {
+        if (currentQuestionIndex >= questions.length) {
+            quizContainer.innerHTML = `
+                <div class="text-center">
+                    <h2 class="text-2xl font-bold mb-4">Quiz Concluído!</h2>
+                    <p class="text-gray-600">Você chegou ao fim das questões. Para praticar novamente, clique em Reiniciar.</p>
+                </div>
+            `;
+            nextBtn.disabled = true;
+            restartBtn.style.display = 'block';
+            progressDisplay.textContent = 'Fim';
+            return;
+        }
+
+        const currentQuestion = questions[currentQuestionIndex];
+        let optionsHtml = '';
+        currentQuestion.options.forEach((option, index) => {
+            optionsHtml += `
+                <button class="answer-btn w-full mb-2" data-index="${index}">${String.fromCharCode(97 + index)}) ${option}</button>
+            `;
+        });
+
+        quizContainer.innerHTML = `
+            <div class="question-text mb-4">${currentQuestion.question}</div>
+            <div class="space-y-3">
+                ${optionsHtml}
+            </div>
+            <div id="justification" class="justification-box hidden">
+                <p id="justification-text" class="justification-text"></p>
+            </div>
+        `;
+        progressDisplay.textContent = `Questão ${currentQuestionIndex + 1} de ${questions.length}`;
+        nextBtn.disabled = true;
+
+        // Adiciona event listeners para os botões de resposta
+        document.querySelectorAll('.answer-btn').forEach(button => {
+            button.addEventListener('click', handleAnswerClick);
+        });
+    }
+
+    function handleAnswerClick(event) {
+        const selectedButton = event.target;
+        const selectedIndex = parseInt(selectedButton.dataset.index);
+        const currentQuestion = questions[currentQuestionIndex];
+        
+        // Remove event listeners de todos os botões para evitar múltiplos cliques
+        document.querySelectorAll('.answer-btn').forEach(btn => {
+            btn.removeEventListener('click', handleAnswerClick);
+        });
+
+        // Adiciona classes de cor para indicar acerto ou erro
+        if (selectedIndex === currentQuestion.answer) {
+            selectedButton.classList.add('correct');
+        } else {
+            selectedButton.classList.add('incorrect');
+            // Encontra e destaca a resposta correta
+            const correctButton = document.querySelector(`.answer-btn[data-index="${currentQuestion.answer}"]`);
+            if (correctButton) {
+                correctButton.classList.add('correct');
+            }
+        }
+
+        // Exibe a justificativa
+        document.getElementById('justification-text').textContent = currentQuestion.justification;
+        document.getElementById('justification').classList.remove('hidden');
+
+        // Habilita o botão de próxima questão
+        nextBtn.disabled = false;
+    }
+
+    nextBtn.addEventListener('click', () => {
+        currentQuestionIndex++;
+        loadQuestion();
+    });
+
+    restartBtn.addEventListener('click', () => {
+        currentQuestionIndex = 0;
+        nextBtn.disabled = true;
+        loadQuestion();
+    });
+
+    // Inicia o quiz
+    loadQuestion();
+</script>
+
+</body>
+</html>
